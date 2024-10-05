@@ -1,0 +1,65 @@
+# Difference of Squares Calculation
+
+This C program contains functions that compute the difference between the square of the sum and the sum of the squares of the first \( n \) natural numbers. The key mathematical concepts used in this implementation are based on the formulas for squaring a sum and summing squares.
+
+## Functions
+
+### `unsigned int tosquare(unsigned int n)`
+
+This function takes an unsigned integer `n` as input and returns its square.
+
+**Parameters:**
+- `n`: An unsigned integer to be squared.
+
+**Returns:**
+- The square of `n`.
+
+---
+
+### `unsigned int square_of_sum(unsigned int n)`
+
+This function calculates the square of the sum of the first \( n \) natural numbers.
+
+**Parameters:**
+- `n`: An unsigned integer representing the number of natural numbers to sum.
+
+**Returns:**
+- The square of the sum of the first \( n \) natural numbers.
+
+---
+
+### `unsigned int sum_of_squares(unsigned int n)`
+
+This function computes the sum of the squares of the first \( n \) natural numbers.
+
+**Parameters:**
+- `n`: An unsigned integer representing the number of natural numbers to consider.
+
+**Returns:**
+- The sum of the squares of the first \( n \) natural numbers.
+
+---
+
+### `unsigned int difference_of_squares(unsigned int n)`
+
+This function calculates the difference between the square of the sum and the sum of the squares of the first \( n \) natural numbers.
+
+**Parameters:**
+- `n`: An unsigned integer representing the number of natural numbers to consider.
+
+**Returns:**
+- The difference between the square of the sum and the sum of the squares.
+
+---
+
+## Example Usage
+
+```c
+#include "difference_of_squares.h"
+
+int main() {
+    unsigned int n = 5;
+    unsigned int difference = difference_of_squares(n);
+    printf("Difference of squares for first %u natural numbers is: %u\n", n, difference);
+    return 0;
+}

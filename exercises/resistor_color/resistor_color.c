@@ -26,7 +26,7 @@ const char* getColorName(Color color) {
     return resistance_band_t[color].name;
 }
 void getColorList(){
-    for(int i = 0; i<9; i++){
+    for(int i = 0; i<10; i++){
         printf("%s\n",resistance_band_t[i].name);
     }
 }

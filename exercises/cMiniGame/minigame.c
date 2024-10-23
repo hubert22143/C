@@ -6,12 +6,12 @@ struct Player{
     char* PlayerVocation;
     int PlayerLevel;
 };
-
 struct Vocations{
     char* vocationList[4];
 };
 struct Weapons{
     char* Rod;
+    char* Wand;
     char* Bow;
     char* Sword;
     char* Axe;
@@ -23,52 +23,106 @@ struct BeginningLocation{
     char* Kazordoon;
     char* Carlin;
 };
-struct Player startGame(){
+struct BegginningEquipment{
+    char* PaladinSet[4];
+    char* SorcererSet[4];
+    char* DruidSet[4];
+    char* KnightSet[4];
+};
+struct Player initializePlayer() {
     struct Player player;
-    struct Vocations vocation;
-    vocation.vocationList[0] = "Paladin";
-    vocation.vocationList[1] = "Sorcerer";
-    vocation.vocationList[2] = "Druid";
-    vocation.vocationList[3] = "Knight";
-    
-    player.PlayerName = malloc(50 * sizeof(char));
-    player.PlayerVocation = malloc(50 * sizeof(char)); 
-    int beginGame;
-    int beginValue = 1;
-    int isSelectedCharValid = 0;
-    printf("Welcome in text-based Tibia! Are you ready to start the game? Type 1 for yes 0 for quit\n");
-    scanf("%d",&beginGame);
-    if(beginGame == beginValue){
-        printf("Welcome in the game! For beginning, please type your nickname:\n");
-        scanf("%s",player.PlayerName);
-        printf("Welcome %s you have four vocations to select, those are Paladin, Sorcerer, Druid, Knight please type your choose!\n",player.PlayerName);
-        scanf("%s",player.PlayerVocation);
-        for(int i = 0; i<4 ; i++){
-            printf("%d loop made ",i);
-            printf("%s is your chosen character\n",player.PlayerVocation);
-            printf("%s is the comparing value\n",vocation.vocationList[i]);
-            if(strcmp(player.PlayerVocation,vocation.vocationList[i]) == 0){
-                printf("You've selected %s \n", player.PlayerVocation);
-                isSelectedCharValid = 1;
-                break;
-            }
-        }
-        if(!isSelectedCharValid){
-            printf("Invalid character selected, begin the game from beginning in order to play\n");
-            free(player.PlayerName);
-            free(player.PlayerVocation);
-            return (struct Player){NULL,NULL,0};
-        }
-        printf("Well well. lets continue our journey....\n");
-        return player;
-    } 
-    else{
-        printf("Thank you for passing by! Have a nice day.\n");
+    player.PlayerName = malloc(16 * sizeof(char));
+    player.PlayerLevel = 1;
+
+    printf("Welcome in the game! As for beginning, please type your nickname (15 character maximum!):\n");
+    scanf("%15s", player.PlayerName);
+
+    if (strlen(player.PlayerName) > 15) {
+        printf("You're not allowed to have that long character!\n");
         free(player.PlayerName);
-        free(player.PlayerVocation);
-        return (struct Player){NULL,NULL,0};
+        player.PlayerName = NULL;
+        return player;
     }
+
+    player.PlayerVocation = malloc(20 * sizeof(char));
+    return player;
+}
+void selectVocation(struct Player* player, struct Weapons* weapon, struct Vocations* vocation) {
+    vocation->vocationList[0] = "Paladin";
+    vocation->vocationList[1] = "Sorcerer";
+    vocation->vocationList[2] = "Druid";
+    vocation->vocationList[3] = "Knight";
+
+    weapon->Rod = "Rod";
+    weapon->Wand = "Wand";
+    weapon->Bow = "Bow";
+    weapon->Sword = "Sword";
+    weapon->Axe = "Axe";
+    weapon->Hammer = "Hammer";
+
+    char* uniqueWeapon = NULL;
+
+    printf("Welcome %s! You have four vocations to select: Paladin, Sorcerer, Druid, Knight. Please type your choice:\n", player->PlayerName);
+    scanf("%19s", player->PlayerVocation);
+
+    int isSelectedCharValid = 0;
+    for (int i = 0; i < 4; i++) {
+        if (strcmp(player->PlayerVocation, vocation->vocationList[i]) == 0) {
+            switch (i) {
+                case 0:
+                    uniqueWeapon = weapon->Bow;
+                    break;
+                case 1: 
+                    uniqueWeapon = weapon->Wand;
+                    break;
+                case 2:
+                    uniqueWeapon = weapon->Rod;
+                    break;
+                case 3:
+                    printf("The knight vocation has three weapon choices: %s, %s, %s. Choose by typing 's', 'a', or 'h':\n", weapon->Sword, weapon->Axe, weapon->Hammer);
+                    char tempWeaponChoice;
+                    scanf(" %c", &tempWeaponChoice);
+                    switch (tempWeaponChoice) {
+                        case 's':
+                            uniqueWeapon = weapon->Sword;
+                            break;
+                        case 'a':
+                            uniqueWeapon = weapon->Axe;
+                            break;
+                        case 'h':
+                            uniqueWeapon = weapon->Hammer;
+                            break;
+                        default:
+                            printf("Invalid weapon selection!\n");
+                            return;
+                    }
+                    break;
+            }
+
+            if (uniqueWeapon != NULL) {
+                printf("You've selected %s.\n", player->PlayerVocation);
+                printf("Your unique weapon is: %s.\n", uniqueWeapon);
+                isSelectedCharValid = 1;
+            }
+            break;
+        }
+    }
+
+    if (!isSelectedCharValid) {
+        printf("Invalid character selected. Please restart the game to play.\n");
+        free(player->PlayerName);
+        free(player->PlayerVocation);
+        return;
+    }
+
+    printf("Well, let's continue our journey...\n");
 }
 int main(){
-    startGame();
+    struct Player player = initializePlayer();
+    struct Weapons weapon;
+    struct Vocations vocation;
+    selectVocation(&player,&weapon,&vocation);
+
+    free(player.PlayerName);
+    free(player.PlayerVocation);
 }
